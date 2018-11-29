@@ -1,5 +1,8 @@
 include objects.fs
 
+variable numVal
+variable boolVal
+
 object class \ "object" is the parent class
    selector objValue ( -- )
    selector objType ( -- )
@@ -18,7 +21,8 @@ exprC class
    overrides objType
 
    :noname ( num numC -- )
-      val ! ;
+      val !
+      val numVal ! ;
    overrides construct
 
 end-class numC
@@ -37,7 +41,8 @@ exprC class
    overrides objType
 
    :noname ( bool boolC -- )
-      val ! ;
+      val ! 
+      val boolVal ! ;
    overrides construct
 
 end-class boolC
@@ -60,3 +65,25 @@ exprC class
    overrides construct
 
 end-class stringC
+
+
+: interp ( exprC -- value )
+   dup 1 = if                        numVal ?   else
+   dup 2 = boolVal 0 = and if        ." false"  else
+   dup 2 = boolVal 0 = invert and if ." true"   else
+                                     ." error"
+   then then then drop ; 
+
+
+24 numC heap-new constant my-num \ new numC
+-1 boolC heap-new constant my-bool \ new boolC 
+
+\ calling interp on numC 
+cr
+my-num typ interp 
+
+\ calling interp on boolC 
+cr
+my-bool typ interp
+
+cr
