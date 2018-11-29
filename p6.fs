@@ -1,21 +1,21 @@
 include objects.fs
 
 object class \ "object" is the parent class
-   selector pr ( -- )
-   selector cls ( -- )
+   selector objValue ( -- )
+   selector objType ( -- )
 end-class exprC
 
 exprC class
    cell% field val
-   cell% 1 constant cl
+   cell% 1 constant typ
 
    :noname ( -- )
-      val @ . ;
-   overrides pr
+      val @ ;
+   overrides objValue
 
    :noname ( -- )
-      cl . ;
-   overrides cls
+      typ ;
+   overrides objType
 
    :noname ( num numC -- )
       val ! ;
@@ -25,21 +25,38 @@ end-class numC
 
 
 exprC class
-   cell% field b
-   cell% 2 constant cl
+   cell% field val
+   cell% 2 constant typ
 
    :noname ( -- )
-      b @ . ;
-   overrides pr
+      val @ ;
+   overrides objValue
 
    :noname ( -- )
-      cl . ;
-   overrides cls
+      typ ;
+   overrides objType
 
    :noname ( bool boolC -- )
-      b ! ;
+      val ! ;
    overrides construct
 
 end-class boolC
 
 
+exprC class
+   cell% field val
+   cell% 3 constant typ
+
+   :noname ( -- )
+      val @ ;
+   overrides objValue
+
+   :noname ( -- )
+      typ ;
+   overrides objType
+
+   :noname ( str stringC -- )
+      val ! ;
+   overrides construct
+
+end-class stringC
