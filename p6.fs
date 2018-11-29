@@ -4,21 +4,21 @@ variable numVal
 variable boolVal
 
 object class \ "object" is the parent class
-   selector pr ( -- )
-   selector cls ( -- )
+   selector objValue ( -- )
+   selector objType ( -- )
 end-class exprC
 
 exprC class
    cell% field val
-   cell% 1 constant cl
+   cell% 1 constant typ
 
    :noname ( -- )
-      val @ . ;
-   overrides pr
+      val @ ;
+   overrides objValue
 
    :noname ( -- )
-      cl ;
-   overrides cls
+      typ ;
+   overrides objType
 
    :noname ( num numC -- )
       val !
@@ -29,30 +29,49 @@ end-class numC
 
 
 exprC class
-   cell% field b
-   cell% 2 constant cl
+   cell% field val
+   cell% 2 constant typ
 
    :noname ( -- )
-      b @ . ;
-   overrides pr
+      val @ ;
+   overrides objValue
 
    :noname ( -- )
-      cl ;
-   overrides cls
+      typ ;
+   overrides objType
 
    :noname ( bool boolC -- )
-      b ! 
-      b boolVal ! ;
+      val ! 
+      val boolVal ! ;
    overrides construct
 
 end-class boolC
+
+
+exprC class
+   cell% field val
+   cell% 3 constant typ
+
+   :noname ( -- )
+      val @ ;
+   overrides objValue
+
+   :noname ( -- )
+      typ ;
+   overrides objType
+
+   :noname ( str stringC -- )
+      val ! ;
+   overrides construct
+
+end-class stringC
 
 
 : interp ( exprC -- value )
    dup 1 = if                        numVal ?   else
    dup 2 = boolVal 0 = and if        ." false"  else
    dup 2 = boolVal 0 = invert and if ." true"   else
-                                 ." error"
+                                     ." error"
    then then then drop ; 
 
 
@@ -61,10 +80,10 @@ end-class boolC
 
 \ calling interp on numC 
 cr
-my-num cls interp 
+my-num typ interp 
 
 \ calling interp on boolC 
 cr
-my-bool cls interp
+my-bool typ interp
 
 cr
